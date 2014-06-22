@@ -32,10 +32,12 @@ Vcs-Browser: http://anonscm.debian.org/gitweb/?p=collab-maint/nginx.git;a=summar
 Package: nginx
 Architecture: all
 Depends: nginx-full   (>= ${source:Version}) |
+         nginx-rtmp   (>= ${source:Version}) |
          nginx-light  (>= ${source:Version}) |
          nginx-extras (>= ${source:Version}) |
          nginx-naxsi  (>= ${source:Version}) ,
          nginx-full   (<< ${source:Version}.1~) |
+         nginx-rtmp   (<< ${source:Version}.1~) |
          nginx-light  (<< ${source:Version}.1~) |
          nginx-extras (<< ${source:Version}.1~) |
          nginx-naxsi  (<< ${source:Version}.1~) ,
@@ -65,10 +67,12 @@ Depends: lsb-base (>= 3.2-14), ${misc:Depends}
 Replaces: nginx (<< 0.8.54-4),
           nginx-extras (<< 0.8.54-4),
           nginx-full (<< 0.8.54-4),
+          nginx-rtmp (<< 0.8.54-4),
           nginx-light (<< 0.8.54-4)
 Breaks: nginx (<< 0.8.54-4),
         nginx-extras (<< 0.8.54-4),
         nginx-full (<< 0.8.54-4),
+        nginx-rtmp (<< 0.8.54-4),
         nginx-light (<< 0.8.54-4)
 Suggests: fcgiwrap, nginx-doc
 Description: small, powerful, scalable web/proxy server - common files
@@ -84,7 +88,7 @@ Architecture: any
 Depends: nginx-common (= ${source:Version}), ${misc:Depends}, ${shlibs:Depends}
 Breaks: nginx (<< 1.4.5-1)
 Provides: httpd, httpd-cgi, nginx
-Conflicts: nginx-extras, nginx-light, nginx-naxsi
+Conflicts: nginx-rtmp, nginx-extras, nginx-light, nginx-naxsi
 Suggests: nginx-doc (= ${source:Version})
 Description: nginx web/proxy server (standard version)
  Nginx ("engine X") is a high-performance web and reverse proxy server
@@ -114,7 +118,7 @@ Architecture: any
 Section: debug
 Priority: extra
 Depends: nginx-full (= ${binary:Version}), ${misc:Depends}
-Conflicts: nginx-extras-dbg, nginx-light-dbg, nginx-naxsi-dbg
+Conflicts: nginx-rtmp-dbg, nginx-extras-dbg, nginx-light-dbg, nginx-naxsi-dbg
 Description: nginx web/proxy server (standard version) - debugging symbols
  Nginx ("engine X") is a high-performance web and reverse proxy server
  created by Igor Sysoev. It can be used both as a standalone web server
@@ -123,13 +127,57 @@ Description: nginx web/proxy server (standard version) - debugging symbols
  This package provides debugging symbols for nginx-full, to assist in debugging
  issues that you may find. It should not be required for normal operation.
 
+Package: nginx-rtmp
+Architecture: any
+Depends: nginx-common (= ${source:Version}), ${misc:Depends}, ${shlibs:Depends}
+Breaks: nginx (<< 1.4.5-1)
+Provides: httpd, httpd-cgi, nginx
+Conflicts: nginx-full, nginx-extras, nginx-light, nginx-naxsi
+Suggests: nginx-doc (= ${source:Version})
+Description: nginx web/proxy server (standard version)
+ Nginx ("engine X") is a high-performance web and reverse proxy server
+ created by Igor Sysoev. It can be used both as a standalone web server
+ and as a proxy to reduce the load on back-end HTTP or mail servers.
+ .
+ This package provides a version of nginx with the complete set of
+ standard modules included (but omitting some of those included in
+ nginx-extra) and the RTMP module.
+ .
+ STANDARD HTTP MODULES: Core, Access, Auth Basic, Auto Index, Browser,
+ Charset, Empty GIF, FastCGI, Geo, Gzip, Headers, Index, Limit Requests,
+ Limit Zone, Log, Map, Memcached, Proxy, Referer, Rewrite, SCGI,
+ Split Clients, SSI, Upstream, User ID, UWSGI.
+ .
+ OPTIONAL HTTP MODULES: Addition, Auth Request, Debug, GeoIP, Gzip
+ Precompression, HTTP Sub, Image Filter, IPv6, Real IP, Spdy, SSL, Stub Status,
+ Substitution, WebDAV, XSLT.
+ .
+ MAIL MODULES: Mail Core, IMAP, POP3, SMTP, SSL.
+ .
+ THIRD PARTY MODULES: Auth PAM, DAV Ext, Echo, HTTP Substitution Filter,
+ Upstream Fair Queue, RTMP.
+
+Package: nginx-rtmp-dbg
+Architecture: any
+Section: debug
+Priority: extra
+Depends: nginx-rtmp (= ${binary:Version}), ${misc:Depends}
+Conflicts: nginx-full-dbg, nginx-extras-dbg, nginx-light-dbg, nginx-naxsi-dbg
+Description: nginx web/proxy server (standard version) - debugging symbols
+ Nginx ("engine X") is a high-performance web and reverse proxy server
+ created by Igor Sysoev. It can be used both as a standalone web server
+ and as a proxy to reduce the load on back-end HTTP or mail servers.
+ .
+ This package provides debugging symbols for nginx-rtmp, to assist in debugging
+ issues that you may find. It should not be required for normal operation.
+
 Package: nginx-light
 Architecture: any
 Priority: extra
 Depends: nginx-common (= ${source:Version}), ${misc:Depends}, ${shlibs:Depends}
 Breaks: nginx (<< 1.4.5-1)
 Provides: httpd, httpd-cgi, nginx
-Conflicts: nginx-extras, nginx-full, nginx-naxsi
+Conflicts: nginx-extras, nginx-full, nginx-rtmp, nginx-naxsi
 Suggests: nginx-doc (= ${source:Version})
 Description: nginx web/proxy server (basic version)
  Nginx ("engine X") is a high-performance web and reverse proxy server
@@ -152,7 +200,7 @@ Architecture: any
 Section: debug
 Priority: extra
 Depends: nginx-light (= ${binary:Version}), ${misc:Depends}
-Conflicts: nginx-extras-dbg, nginx-full-dbg, nginx-naxsi-dbg
+Conflicts: nginx-extras-dbg, nginx-full-dbg, nginx-rtmp-dbg, nginx-naxsi-dbg
 Description: nginx web/proxy server (basic version) - debugging symbols
  Nginx ("engine X") is a high-performance web and reverse proxy server
  created by Igor Sysoev. It can be used both as a standalone web server
@@ -171,7 +219,7 @@ Depends: nginx-common (= ${source:Version}),
          ${shlibs:Depends}
 Breaks: nginx (<< 1.4.5-1)
 Provides: httpd, httpd-cgi, nginx
-Conflicts: nginx-full, nginx-light, nginx-naxsi
+Conflicts: nginx-full, nginx-rtmp, nginx-light, nginx-naxsi
 Suggests: nginx-doc (= ${source:Version})
 Description: nginx web/proxy server (extended version)
  Nginx ("engine X") is a high-performance web and reverse proxy server
@@ -202,7 +250,7 @@ Architecture: any
 Section: debug
 Priority: extra
 Depends: nginx-extras (= ${binary:Version}), ${misc:Depends}
-Conflicts: nginx-full-dbg, nginx-light-dbg, nginx-naxsi-dbg
+Conflicts: nginx-full-dbg, nginx-rtmp-dbg, nginx-light-dbg, nginx-naxsi-dbg
 Description: nginx web/proxy server (extended version) - debugging symbols
  Nginx ("engine X") is a high-performance web and reverse proxy server
  created by Igor Sysoev. It can be used both as a standalone web server
@@ -219,7 +267,7 @@ Depends: nginx-common (= ${source:Version}), ${misc:Depends}, ${shlibs:Depends}
 Breaks: nginx (<< 1.4.5-1),
         nginx-naxsi-ui (<< 1.4.5-1)
 Provides: httpd, httpd-cgi, nginx
-Conflicts: nginx-extras, nginx-full, nginx-light
+Conflicts: nginx-extras, nginx-full, nginxg-rtmp, nginx-light
 Description: nginx web/proxy server (version with naxsi)
  Nginx ("engine X") is a high-performance web and reverse proxy server
  created by Igor Sysoev. It can be used both as a standalone web server
@@ -242,7 +290,7 @@ Architecture: any
 Section: debug
 Priority: extra
 Depends: nginx-naxsi (= ${binary:Version}), ${misc:Depends}
-Conflicts: nginx-extras-dbg, nginx-full-dbg, nginx-light-dbg
+Conflicts: nginx-extras-dbg, nginx-full-dbg, nginx-rtmp-dbg, nginx-light-dbg
 Description: nginx web/proxy server (version with naxsi) - debugging symbols
  Nginx ("engine X") is a high-performance web and reverse proxy server
  created by Igor Sysoev. It can be used both as a standalone web server
